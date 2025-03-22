@@ -1,6 +1,58 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Clock</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
 <body>
-<h1>hello word!!!</h1>
-<p>this is a html page</p>
+    <div class="container">
+        <h1>World Clock</h1>
+        <p>Check the current time across different timezones</p>
+        
+        <div id="clock-container">
+            <div id="clock">00:00:00</div>
+            <div id="date"></div>
+            <div class="timezone-selector">
+                <label for="timezone">Timezone:</label>
+                <select id="timezone">
+                    <option value="-12">UTC-12:00</option>
+                    <option value="-11">UTC-11:00</option>
+                    <option value="-10">UTC-10:00</option>
+                    <option value="-9">UTC-09:00</option>
+                    <option value="-8">UTC-08:00</option>
+                    <option value="-7">UTC-07:00</option>
+                    <option value="-6">UTC-06:00</option>
+                    <option value="-5">UTC-05:00</option>
+                    <option value="-4">UTC-04:00</option>
+                    <option value="-3">UTC-03:00</option>
+                    <option value="-2">UTC-02:00</option>
+                    <option value="-1">UTC-01:00</option>
+                    <option value="0" selected>UTC+00:00</option>
+                    <option value="1">UTC+01:00</option>
+                    <option value="2">UTC+02:00</option>
+                    <option value="3">UTC+03:00</option>
+                    <option value="4">UTC+04:00</option>
+                    <option value="5">UTC+05:00</option>
+                    <option value="5.5">UTC+05:30</option>
+                    <option value="6">UTC+06:00</option>
+                    <option value="7">UTC+07:00</option>
+                    <option value="8">UTC+08:00</option>
+                    <option value="9">UTC+09:00</option>
+                    <option value="10">UTC+10:00</option>
+                    <option value="11">UTC+11:00</option>
+                    <option value="12">UTC+12:00</option>
+                </select>
+            </div>
+        </div>
+        
+        <footer>
+            &copy; 2025 World Clock App
+        </footer>
+    </div>
+
+    <script src="js/clock.js"></script>
 </body>
 </html>
