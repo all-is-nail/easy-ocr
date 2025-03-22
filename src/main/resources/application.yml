@@ -2,12 +2,14 @@ server:
     port: 8080
 spring:
     datasource:
-        data: classpath:db/data.sql
-        schema: classpath:db/schema.sql
         driver-class-name: org.h2.Driver
         url: jdbc:h2:file:~/.h2/easy_ocr
         username: easy_ocr
         password: easy_ocr
+    sql:
+        init:
+            data-locations: optional:classpath:db/data.sql
+            schema-locations: optional:classpath:db/schema.sql
     h2:
         console:
             enabled: true
