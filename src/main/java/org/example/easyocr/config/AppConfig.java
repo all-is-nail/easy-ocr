@@ -1,5 +1,6 @@
 package org.example.easyocr.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
@@ -20,6 +21,15 @@ import java.util.logging.Logger;
 public class AppConfig implements WebMvcConfigurer {
 
     private static final Logger logger = Logger.getLogger(AppConfig.class.getName());
+    
+    @Value("${app.http.connect-timeout}")
+    private int connectTimeout;
+    
+    @Value("${app.http.read-timeout}")
+    private int readTimeout;
+    
+    @Value("${app.cors.allowed-origins}")
+    private String allowedOrigins;
 
     @Bean
     public RestTemplate restTemplate() {
@@ -51,8 +61,8 @@ public class AppConfig implements WebMvcConfigurer {
     @Bean
     public ClientHttpRequestFactory clientHttpRequestFactory() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(30000); // 30 seconds
-        factory.setReadTimeout(60000);    // 60 seconds
+        factory.setConnectTimeout(connectTimeout);
+        factory.setReadTimeout(readTimeout);
         factory.setBufferRequestBody(true);
         return factory;
     }
@@ -60,7 +70,7 @@ public class AppConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*")
+                .allowedOrigins(allowedOrigins)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*");
     }
