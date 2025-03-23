@@ -24,8 +24,8 @@ spring:
 
 logging:
     level:
-        org.springframework.web.client.RestTemplate: DEBUG
-        org.example.easyocr: DEBUG
+        '[org.springframework.web.client.RestTemplate]': DEBUG
+        '[org.example.easyocr]': DEBUG
 
 openai:
     api:
