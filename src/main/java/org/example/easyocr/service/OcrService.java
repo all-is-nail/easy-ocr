@@ -37,7 +37,10 @@ public class OcrService {
     private String model;
     
     @Value("${openai.prompt}")
-    private String prompt;
+    private String defaultPrompt;
+    
+    @Value("${openai.structured.prompt}")
+    private String structuredPrompt;
 
     public OcrService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -57,11 +60,42 @@ public class OcrService {
         return processBase64Image(base64Image, image.getContentType());
     }
 
+    /**
+     * Process a document image for structured field extraction (ID cards, licenses, etc.)
+     * @param image The document image to process
+     * @return A map containing the extracted structured data
+     */
+    public Map<String, Object> processDocumentImage(MultipartFile image) throws IOException {
+        if (image == null || image.isEmpty()) {
+            logger.warning("Received empty or null document image file");
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "No document image file provided or file is empty");
+            return errorResponse;
+        }
+        
+        logger.info("Processing document image: " + image.getOriginalFilename() + ", size: " + image.getSize() + " bytes, contentType: " + image.getContentType());
+        byte[] imageBytes = image.getBytes();
+        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+        return processDocumentBase64Image(base64Image, image.getContentType());
+    }
+
     public Map<String, Object> processBase64Image(String base64Image) throws IOException {
         return processBase64Image(base64Image, null);
     }
 
+    public Map<String, Object> processDocumentBase64Image(String base64Image) throws IOException {
+        return processDocumentBase64Image(base64Image, null);
+    }
+
+    public Map<String, Object> processDocumentBase64Image(String base64Image, String contentType) throws IOException {
+        return processImageWithPrompt(base64Image, contentType, structuredPrompt);
+    }
+
     public Map<String, Object> processBase64Image(String base64Image, String contentType) throws IOException {
+        return processImageWithPrompt(base64Image, contentType, defaultPrompt);
+    }
+
+    private Map<String, Object> processImageWithPrompt(String base64Image, String contentType, String promptToUse) throws IOException {
         if (base64Image == null || base64Image.trim().isEmpty()) {
             logger.warning("Received empty or null base64 image string");
             Map<String, Object> errorResponse = new HashMap<>();
@@ -97,7 +131,7 @@ public class OcrService {
         logger.info("Processing base64 image, length: " + base64Image.length() + ", contentType: " + contentType);
         logger.info("Using API URL: " + apiUrl);
         logger.info("Using model: " + model);
-        logger.info("Using OCR prompt: " + prompt);
+        logger.info("Using prompt: " + promptToUse);
         
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -114,10 +148,10 @@ public class OcrService {
         
         List<Map<String, Object>> contentItems = new ArrayList<>();
         
-        // Text part - Put a clear, direct instruction
+        // Text part - Put a clear, direct instruction for structured extraction
         Map<String, Object> textItem = new HashMap<>();
         textItem.put("type", "text");
-        textItem.put("text", prompt);
+        textItem.put("text", promptToUse);
         
         // Image part
         Map<String, Object> imageItem = new HashMap<>();
@@ -197,9 +231,38 @@ public class OcrService {
                 Map<String, Object> message = (Map<String, Object>) choice.get("message");
                 String content = (String) message.get("content");
                 
-                // Format the content
+                // Try to parse the content as JSON
+                try {
+                    ObjectMapper mapper = new ObjectMapper();
+                    if (content.contains("{") && content.contains("}")) {
+                        // Extract JSON portion if it's embedded in text
+                        int startIdx = content.indexOf('{');
+                        int endIdx = content.lastIndexOf('}') + 1;
+                        if (startIdx >= 0 && endIdx > startIdx) {
+                            String jsonPart = content.substring(startIdx, endIdx);
+                            Map<String, Object> jsonData = mapper.readValue(jsonPart, Map.class);
+                            
+                            // Return the structured data directly
+                            logger.info("Successfully parsed structured document data as JSON");
+                            return jsonData;
+                        }
+                    }
+                    
+                    // If we couldn't extract JSON with simple substring, try to parse the whole response
+                    try {
+                        Map<String, Object> jsonData = mapper.readValue(content, Map.class);
+                        logger.info("Successfully parsed full document data as JSON");
+                        return jsonData;
+                    } catch (Exception e) {
+                        logger.warning("Could not parse response as JSON, returning as raw text: " + e.getMessage());
+                    }
+                } catch (Exception e) {
+                    logger.warning("Failed to extract JSON from response: " + e.getMessage());
+                }
+                
+                // Fallback to raw text if JSON parsing fails
                 result.put("extracted_text", content);
-                logger.info("Text extracted successfully");
+                logger.info("Text extracted as raw content");
                 
                 return result;
             } else {
