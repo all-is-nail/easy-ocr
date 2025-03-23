@@ -36,6 +36,9 @@ public class OcrService {
     
     @Value("${openai.model}")
     private String model;
+    
+    @Value("${openai.prompt}")
+    private String prompt;
 
     public OcrService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -95,6 +98,7 @@ public class OcrService {
         logger.info("Processing base64 image, length: " + base64Image.length() + ", contentType: " + contentType);
         logger.info("Using API URL: " + apiUrl);
         logger.info("Using model: " + model);
+        logger.info("Using OCR prompt: " + prompt);
         
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -114,7 +118,7 @@ public class OcrService {
         // Text part - Put a clear, direct instruction
         Map<String, Object> textItem = new HashMap<>();
         textItem.put("type", "text");
-        textItem.put("text", "You are an OCR service. Your only task is to extract all visible text from this image. Return only the extracted text exactly as it appears, with original formatting when possible. Do not analyze, interpret, or add any commentary to the text.");
+        textItem.put("text", prompt);
         
         // Image part
         Map<String, Object> imageItem = new HashMap<>();
