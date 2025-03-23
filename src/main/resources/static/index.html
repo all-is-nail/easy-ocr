@@ -6,17 +6,18 @@
     <title>index</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
+    <link href="css/language-toggle.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>AI Driven Development</h1>
-        <p>Check the current time across different timezones</p>
+        <h1 data-i18n="main_title">AI Driven Development</h1>
+        <p data-i18n="clock_subtitle">Check the current time across different timezones</p>
         
         <div id="clock-container">
             <div id="clock">00:00:00</div>
             <div id="date"></div>
             <div class="timezone-selector">
-                <label for="timezone">Timezone:</label>
+                <label for="timezone" data-i18n="timezone_label">Timezone:</label>
                 <select id="timezone">
                     <option value="-12">UTC-12:00</option>
                     <option value="-11">UTC-11:00</option>
@@ -49,17 +50,19 @@
         </div>
         
         <div class="features-container">
-            <h2>Available Features</h2>
+            <h2 data-i18n="features_title">Available Features</h2>
             <ul>
-                <li><a href="/ocr.html" class="feature-link">OCR - Text Extraction from Images</a></li>
+                <li><a href="/ocr.html" class="feature-link" data-i18n="ocr_feature">OCR - Text Extraction from Images</a></li>
             </ul>
         </div>
         
         <footer>
-            &copy; 2025 AI Driven Development
+            <span data-i18n="footer_copyright">&copy; 2025 AI Driven Development</span>
         </footer>
     </div>
 
     <script src="js/clock.js"></script>
+    <script src="js/language-manifest.js"></script>
+    <script src="js/translations.js"></script>
 </body>
 </html>

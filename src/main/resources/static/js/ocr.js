@@ -16,15 +16,26 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentFile = null; // Store the current file
     let isDocumentMode = false; // Default mode is generic OCR
     
+    // Initialize the mode label with correct language
+    setTimeout(updateModeLabel, 100); // Small delay to ensure translations.js has loaded
+    
     // Mode toggle handler
     modeToggle.addEventListener('change', function() {
         isDocumentMode = modeToggle.checked;
-        modeLabel.textContent = isDocumentMode ? 'Document Structured' : 'Generic OCR';
+        updateModeLabel();
         
         if (resultContainer.style.display !== 'none') {
             resultContainer.style.display = 'none';
         }
     });
+    
+    function updateModeLabel() {
+        if (typeof t === 'function') {
+            modeLabel.textContent = isDocumentMode ? t('doc_processing') : t('generic_ocr');
+        } else {
+            modeLabel.textContent = isDocumentMode ? 'Document Processing' : 'Generic OCR';
+        }
+    }
     
     // Prevent defaults for drag events
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -223,9 +234,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Set the title based on the mode
-        document.querySelector('#result-container h2').textContent = isDocumentMode 
-            ? 'Extracted Document Fields' 
-            : 'Extracted Text';
+        const resultTitle = document.querySelector('#result-container h2');
+        if (typeof t === 'function') {
+            resultTitle.textContent = isDocumentMode ? t('extracted_fields') : t('extracted_text');
+        } else {
+            resultTitle.textContent = isDocumentMode ? 'Extracted Document Fields' : 'Extracted Text';
+        }
         
         // Format the JSON for display
         try {

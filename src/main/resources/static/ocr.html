@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Easy OCR - Image Text Extraction</title>
     <link rel="stylesheet" href="css/ocr.css">
+    <link rel="stylesheet" href="css/language-toggle.css">
     <style>
         .header-link {
             text-align: center;
@@ -21,30 +22,30 @@
 </head>
 <body>
     <div class="container">
-        <h1>Easy OCR</h1>
-        <p>Upload an image to extract text</p>
+        <h1 data-i18n="ocr_title">Easy OCR</h1>
+        <p data-i18n="ocr_subtitle">Upload an image to extract text</p>
         
         <div class="mode-selector">
-            <span>Mode: </span>
+            <span data-i18n="mode">Mode: </span>
             <label class="switch">
                 <input type="checkbox" id="mode-toggle">
                 <span class="slider round"></span>
             </label>
-            <span id="mode-label">Generic OCR</span>
+            <span id="mode-label" data-i18n="generic_ocr">Generic OCR</span>
         </div>
         
         <div class="header-link">
-            <a href="document.html">Go to dedicated Document Processing page</a>
+            <a href="document.html" data-i18n="go_document">Go to dedicated Document Processing page</a>
         </div>
         
         <div id="upload-container" class="upload-container">
             <div id="drop-area" class="drop-area">
-                <p>Drag & drop image here</p>
-                <p>or</p>
-                <label for="file-input" class="file-input-label">Choose File</label>
+                <p data-i18n="drag_drop">Drag & drop image here</p>
+                <p data-i18n="or">or</p>
+                <label for="file-input" class="file-input-label" data-i18n="choose_file">Choose File</label>
                 <input type="file" id="file-input" accept="image/*" style="display: none;">
-                <p>or</p>
-                <p>Paste image (Cmd/Ctrl+V)</p>
+                <p data-i18n="or">or</p>
+                <p data-i18n="paste_image">Paste image (Cmd/Ctrl+V)</p>
             </div>
             
             <div id="image-preview-container" class="image-preview-container" style="display: none;">
@@ -52,13 +53,13 @@
                 <button id="remove-image" class="remove-btn">✕</button>
             </div>
             
-            <button id="process-btn" class="process-btn" disabled>Process Image</button>
+            <button id="process-btn" class="process-btn" disabled data-i18n="process_image">Process Image</button>
         </div>
         
         <div id="result-container" class="result-container" style="display: none;">
-            <h2>Extracted Text</h2>
+            <h2 data-i18n="extracted_text">Extracted Text</h2>
             <div id="result-json" class="result-json"></div>
-            <div class="copy-notification" id="copy-notification">Copied to clipboard!</div>
+            <div class="copy-notification" id="copy-notification" data-i18n="copied">Copied to clipboard!</div>
         </div>
         
         <div id="spinner" class="spinner" style="display: none;">
@@ -66,6 +67,8 @@
         </div>
     </div>
     
+    <script src="js/language-manifest.js"></script>
+    <script src="js/translations.js"></script>
     <script src="js/ocr.js"></script>
 </body>
 </html> 
