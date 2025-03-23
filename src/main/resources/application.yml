@@ -17,3 +17,18 @@ spring:
             settings:
                 trace: true
                 web-allow-others: true
+    servlet:
+        multipart:
+            max-file-size: 10MB
+            max-request-size: 10MB
+
+logging:
+    level:
+        org.springframework.web.client.RestTemplate: DEBUG
+        org.example.easyocr: DEBUG
+
+openai:
+    api:
+        url: https://api.openai.com/v1/chat/completions
+        key: sk-*** # Add your OpenAI API key here
+    model: gpt-4o-mini
