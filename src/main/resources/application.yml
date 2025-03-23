@@ -33,6 +33,8 @@ openai:
         key: sk-*** # Add your OpenAI API key here
     model: gpt-4o-mini
     prompt: "You are an OCR service. Your only task is to extract all visible text from this image. Return only the extracted text exactly as it appears, with original formatting when possible. Do not analyze, interpret, or add any commentary to the text."
+    structured:
+        prompt: "Extract all visible fields from this document (ID card, driver's license, etc.) and return ONLY a JSON object with field names in English and Keep the original value of the corresponding field."
 
 app:
     http:
