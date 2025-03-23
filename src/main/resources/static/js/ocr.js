@@ -84,6 +84,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Prevent label clicks from bubbling to the drop area
+    const fileInputLabel = document.querySelector('.file-input-label');
+    fileInputLabel.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+    
     // Click on drop area to trigger file input
     dropArea.addEventListener('click', function() {
         fileInput.click();
