@@ -34,7 +34,10 @@ openai:
     model: gpt-4o-mini
     prompt: "You are an OCR service. Your only task is to extract all visible text from this image. Return only the extracted text exactly as it appears, with original formatting when possible. Do not analyze, interpret, or add any commentary to the text."
     structured:
-        prompt: "Extract all visible fields from this document (ID card, driver's license, etc.) and return ONLY a JSON object with field names in English and Keep the original value of the corresponding field."
+        prompt: "# You are an OCR service. 
+        - Your task is to extract all visible fields from this image (this image could be an ID card, driver's license, passport, or other document) 
+        - return **ONLY a JSON object** with field names in English(**Defining Field Names Using Snake Nomenclature**)
+        - Keep the original value of the corresponding field."
 
 app:
     http:
