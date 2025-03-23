@@ -5,11 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Easy OCR - Image Text Extraction</title>
     <link rel="stylesheet" href="css/ocr.css">
+    <style>
+        .header-link {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .header-link a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .header-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>Easy OCR</h1>
         <p>Upload an image to extract text</p>
+        
+        <div class="mode-selector">
+            <span>Mode: </span>
+            <label class="switch">
+                <input type="checkbox" id="mode-toggle">
+                <span class="slider round"></span>
+            </label>
+            <span id="mode-label">Generic OCR</span>
+        </div>
+        
+        <div class="header-link">
+            <a href="document.html">Go to dedicated Document Processing page</a>
+        </div>
         
         <div id="upload-container" class="upload-container">
             <div id="drop-area" class="drop-area">

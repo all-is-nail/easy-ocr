@@ -10,8 +10,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultJson = document.getElementById('result-json');
     const copyNotification = document.getElementById('copy-notification');
     const spinner = document.getElementById('spinner');
+    const modeToggle = document.getElementById('mode-toggle');
+    const modeLabel = document.getElementById('mode-label');
     
     let currentFile = null; // Store the current file
+    let isDocumentMode = false; // Default mode is generic OCR
+    
+    // Mode toggle handler
+    modeToggle.addEventListener('change', function() {
+        isDocumentMode = modeToggle.checked;
+        modeLabel.textContent = isDocumentMode ? 'Document Structured' : 'Generic OCR';
+        
+        if (resultContainer.style.display !== 'none') {
+            resultContainer.style.display = 'none';
+        }
+    });
     
     // Prevent defaults for drag events
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -134,22 +147,24 @@ document.addEventListener('DOMContentLoaded', function() {
     function processImage() {
         if (!currentFile) return;
         
-        console.log("Processing image:", currentFile.name);
+        console.log(`Processing image in ${isDocumentMode ? 'document structured' : 'generic'} mode:`, currentFile.name);
         spinner.style.display = 'flex';
         resultContainer.style.display = 'none';
         
         // If file is from paste or has been read as data URL
         if (imagePreview.src.indexOf('data:image') === 0) {
-            console.log("Processing as base64 image");
+            console.log(`Processing as base64 image in ${isDocumentMode ? 'document structured' : 'generic'} mode`);
             const base64Image = imagePreview.src;
             processBase64Image(base64Image);
         } else {
-            console.log("Processing as file upload");
+            console.log(`Processing as file upload in ${isDocumentMode ? 'document structured' : 'generic'} mode`);
             // If file is from file input
             const formData = new FormData();
             formData.append('image', currentFile);
             
-            fetch('/api/ocr/process', {
+            const endpoint = isDocumentMode ? '/api/ocr/document' : '/api/ocr/process';
+            
+            fetch(endpoint, {
                 method: 'POST',
                 body: formData
             })
@@ -160,9 +175,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function processBase64Image(base64Image) {
-        console.log("Sending base64 image to API, length:", base64Image.length);
+        console.log(`Sending base64 image to API in ${isDocumentMode ? 'document structured' : 'generic'} mode, length:`, base64Image.length);
         
-        fetch('/api/ocr/process-base64', {
+        const endpoint = isDocumentMode ? '/api/ocr/document-base64' : '/api/ocr/process-base64';
+        
+        fetch(endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -204,6 +221,11 @@ document.addEventListener('DOMContentLoaded', function() {
             showError("The API couldn't process the image properly. Please try a different image or format.");
             return;
         }
+        
+        // Set the title based on the mode
+        document.querySelector('#result-container h2').textContent = isDocumentMode 
+            ? 'Extracted Document Fields' 
+            : 'Extracted Text';
         
         // Format the JSON for display
         try {
