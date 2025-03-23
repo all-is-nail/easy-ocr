@@ -75,7 +75,6 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>org.example.easyocr.EasyOcrApplication</mainClass>
-                    <skip>true</skip>
                 </configuration>
                 <executions>
                     <execution>
