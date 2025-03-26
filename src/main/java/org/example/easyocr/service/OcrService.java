@@ -181,15 +181,6 @@ public class OcrService {
         
         logger.info("Request body prepared with image data URI length: " + dataUri.length());
         
-        // Debug the actual request
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            logger.info("Request body (first 1000 chars): " + 
-                mapper.writeValueAsString(requestBody).substring(0, Math.min(1000, mapper.writeValueAsString(requestBody).length())));
-        } catch (Exception e) {
-            logger.warning("Could not log request body: " + e.getMessage());
-        }
-        
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
         
         try {
