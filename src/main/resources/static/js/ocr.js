@@ -13,11 +13,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const modeToggle = document.getElementById('mode-toggle');
     const modeLabel = document.getElementById('mode-label');
     
-    let currentFile = null; // Store the current file
-    let isDocumentMode = false; // Default mode is generic OCR
+    // Store the current file
+    let currentFile = null; 
+    // Default mode is generic OCR
+    let isDocumentMode = false; 
     
-    // Initialize the mode label with correct language
-    setTimeout(updateModeLabel, 100); // Small delay to ensure translations.js has loaded
+    // Small delay to ensure translations.js has loaded
+    setTimeout(updateModeLabel, 100); 
     
     // Mode toggle handler
     modeToggle.addEventListener('change', function() {
@@ -161,6 +163,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Process the image
     processBtn.addEventListener('click', processImage);
     
+    /**
+     * Process the image
+     */
     function processImage() {
         if (!currentFile) return;
         
@@ -173,9 +178,9 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(`Processing as base64 image in ${isDocumentMode ? 'document structured' : 'generic'} mode`);
             const base64Image = imagePreview.src;
             processBase64Image(base64Image);
+        // If file is from file input
         } else {
             console.log(`Processing as file upload in ${isDocumentMode ? 'document structured' : 'generic'} mode`);
-            // If file is from file input
             const formData = new FormData();
             formData.append('image', currentFile);
             
@@ -191,6 +196,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    /**
+     * Process the base64 image
+     */
     function processBase64Image(base64Image) {
         console.log(`Sending base64 image to API in ${isDocumentMode ? 'document structured' : 'generic'} mode, length:`, base64Image.length);
         
@@ -207,7 +215,10 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(displayResult)
         .catch(handleError);
     }
-    
+
+    /**
+     * Handle the response from the API
+     */
     function handleResponse(response) {
         console.log("Received response with status:", response.status);
         if (!response.ok) {
@@ -215,13 +226,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         return response.json();
     }
-    
+
+    /**
+     * Handle the error from the API
+     */
     function handleError(error) {
         console.error('Error during processing:', error);
         showError(`An error occurred during processing: ${error.message}`);
         spinner.style.display = 'none';
     }
-    
+
+    /**
+     * Display the result
+     */
     function displayResult(data) {
         console.log("Processing result:", data);
         spinner.style.display = 'none';
@@ -270,11 +287,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Failed to copy: ', err);
             });
     });
-    
+
+    /**
+     * Show the copy notification
+     */
     function showCopyNotification() {
         copyNotification.classList.add('show');
         setTimeout(() => {
             copyNotification.classList.remove('show');
         }, 2000);
     }
-}); 
+});
