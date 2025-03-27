@@ -23,8 +23,9 @@ public class OcrController {
         this.ocrService = ocrService;
     }
 
-    /*
+    /**
      * Process an image file and return the extracted text
+     * 
      * @param image The image file to process
      * @return A map containing the extracted text
      */
@@ -59,6 +60,12 @@ public class OcrController {
         }
     }
 
+    /**
+     * Process a base64 encoded image and return the extracted text
+     * 
+     * @param request Map containing the base64 encoded image
+     * @return A JSON object containing the extracted fields
+     */
     @PostMapping(value = "/process-base64")
     public ResponseEntity<Map<String, Object>> processBase64Image(@RequestBody Map<String, String> request) {
         try {
